@@ -340,6 +340,43 @@ export function IdentityScreen() {
         })()}
       </div>
 
+      {/* ── Identity Forming — shown when early-stage runner ── */}
+      <div style={{ padding: "0 22px 16px" }}>
+        <div style={{
+          background: "rgba(255,255,255,0.02)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderRadius: 20,
+          padding: "18px 18px",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 20% 50%, rgba(46,200,122,0.04) 0%, transparent 65%)", pointerEvents: "none" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+            <div style={{ fontSize: 26 }}>🌱</div>
+            <div>
+              <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 600, color: "rgba(240,242,248,0.7)" }}>
+                Identity Forming...
+              </p>
+              <p style={{ margin: 0, fontSize: 12, color: "rgba(240,242,248,0.35)", lineHeight: 1.45 }}>
+                We are observing your running style.
+              </p>
+            </div>
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+              <span style={{ fontSize: 11, color: "rgba(240,242,248,0.3)" }}>Progress to first identity</span>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "rgba(46,200,122,0.7)" }}>0 / 10 runs</span>
+            </div>
+            <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2 }}>
+              <div style={{ height: "100%", width: "0%", background: "#2EC87A", borderRadius: 2 }} />
+            </div>
+          </div>
+          <p style={{ margin: 0, fontSize: 11, color: "rgba(240,242,248,0.2)", fontStyle: "italic", fontFamily: "var(--font-display)" }}>
+            Every runner starts here.
+          </p>
+        </div>
+      </div>
+
       {/* Identity list */}
       <div style={{ padding: "0 22px", display: "flex", flexDirection: "column", gap: 10 }}>
         <p style={{ margin: "0 0 8px", fontSize: 11, fontWeight: 600, color: "rgba(240,242,248,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>

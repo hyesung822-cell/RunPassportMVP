@@ -2,6 +2,12 @@ import { motion } from "motion/react";
 import { CARDS, IDENTITIES, rarityConfig } from "../data";
 import { CollectibleCard } from "../components/CollectibleCard";
 
+// Injected by App.tsx so Profile can trigger P1 screens
+export interface ProfileScreenProps {
+  onMonthlyReview?: () => void;
+  onAnnualPassport?: () => void;
+}
+
 const featuredCards = CARDS.filter((c) => c.unlocked).slice(0, 5);
 const mainIdentity = IDENTITIES.find((i) => i.isMain)!;
 const mainCfg = rarityConfig[mainIdentity.rarity];
@@ -15,7 +21,7 @@ const stats = [
   { label: "Current Streak",    value: "14",     unit: "days", icon: "🔥" },
 ];
 
-export function ProfileScreen() {
+export function ProfileScreen({ onMonthlyReview, onAnnualPassport }: ProfileScreenProps = {}) {
   return (
     <div style={{ minHeight: "100dvh", background: "#0B1023", paddingBottom: 96 }}>
       {/* Hero header */}
@@ -53,23 +59,15 @@ export function ProfileScreen() {
           <h1 style={{ margin: "0 0 6px", fontSize: 24, fontWeight: 700, color: "#F0F2F8", letterSpacing: "-0.02em" }}>
             Alex Rivera
           </h1>
-          <p style={{ margin: "0 0 14px", fontSize: 13, color: "rgba(240,242,248,0.4)" }}>
-            São Paulo, Brazil · Running since March 2021
+          <p style={{ margin: "0 0 4px", fontSize: 13, color: "rgba(240,242,248,0.4)" }}>
+            São Paulo, Brazil
+          </p>
+          <p style={{ margin: "0 0 14px", fontSize: 12, color: "rgba(240,242,248,0.25)" }}>
+            Running since March 2021 · 94 journeys collected
           </p>
 
-          {/* Level + Identity badges */}
+          {/* Identity badge */}
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <div style={{
-              background: "rgba(212,166,61,0.12)",
-              border: "1px solid rgba(212,166,61,0.3)",
-              borderRadius: 20,
-              padding: "5px 14px",
-              display: "flex",
-              alignItems: "center",
-              gap: 5,
-            }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#D4A63D", letterSpacing: "0.06em" }}>LEVEL 24</span>
-            </div>
             <div style={{
               background: mainCfg.badge,
               borderRadius: 20,
@@ -189,6 +187,65 @@ export function ProfileScreen() {
                 {stat.value}
                 {stat.unit && <span style={{ fontSize: 12, color: "rgba(240,242,248,0.35)", marginLeft: 3 }}>{stat.unit}</span>}
               </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── P1 Review screens ── */}
+      <div style={{ padding: "24px 22px 8px" }}>
+        <h2 style={{ margin: "0 0 12px", fontSize: 13, fontWeight: 600, color: "rgba(240,242,248,0.4)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          Your Collection
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {[
+            {
+              icon: "📅", label: "Monthly Review", sub: "June 2026 · 84.3 km",
+              badge: "P1", color: "#5090E0",
+              onTap: onMonthlyReview,
+            },
+            {
+              icon: "📖", label: "2026 Passport", sub: "Your year in running",
+              badge: "P1", color: "#D4A63D",
+              onTap: onAnnualPassport,
+            },
+          ].map((item) => (
+            <motion.div
+              key={item.label}
+              whileTap={{ scale: 0.98 }}
+              onClick={item.onTap}
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 18,
+                padding: "14px 16px",
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                cursor: item.onTap ? "pointer" : "default",
+              }}
+            >
+              <div style={{
+                width: 42, height: 42, borderRadius: 13,
+                background: `${item.color}15`,
+                border: `1px solid ${item.color}25`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 20, flexShrink: 0,
+              }}>
+                {item.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 600, color: "#F0F2F8" }}>{item.label}</p>
+                <p style={{ margin: 0, fontSize: 12, color: "rgba(240,242,248,0.4)" }}>{item.sub}</p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ background: `${item.color}18`, border: `1px solid ${item.color}30`, borderRadius: 8, padding: "2px 7px" }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: item.color, letterSpacing: "0.08em" }}>{item.badge}</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M5 2l5 5-5 5" stroke="rgba(240,242,248,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
             </motion.div>
           ))}
         </div>

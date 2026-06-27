@@ -6,9 +6,24 @@ import { CalendarScreen } from "./screens/CalendarScreen";
 import { PassportScreen } from "./screens/PassportScreen";
 import { IdentityScreen } from "./screens/IdentityScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
+import { RunDetailScreen } from "./screens/RunDetailScreen";
+import { RunCompleteScreen } from "./screens/RunCompleteScreen";
+import { NewMailScreen } from "./screens/NewMailScreen";
+import { OpenEnvelopeScreen } from "./screens/OpenEnvelopeScreen";
+import { CardRevealScreen } from "./screens/CardRevealScreen";
+import { MonthlyReviewScreen } from "./screens/MonthlyReviewScreen";
+import { AnnualPassportScreen } from "./screens/AnnualPassportScreen";
+import { BrandDirectionPanel } from "./components/BrandDirectionPanel";
 import "../styles/fonts.css";
 
-type Screen = "home" | "run" | "calendar" | "passport" | "identity" | "profile";
+type Screen =
+  | "home" | "run" | "calendar" | "passport" | "identity" | "profile"
+  | "rundetail"
+  | "runComplete" | "newMail" | "openEnvelope" | "cardReveal"
+  | "monthlyReview" | "annualPassport";
+
+// Screens that are part of immersive flows — hide bottom nav
+const HIDE_NAV: Screen[] = ["runComplete", "newMail", "openEnvelope", "cardReveal"];
 
 interface NavItem {
   key: Screen;
@@ -110,26 +125,45 @@ const NAV: NavItem[] = [
   },
 ];
 
-const SCREENS: Record<Screen, JSX.Element> = {
-  home:     <HomeScreen />,
-  run:      <RunScreen />,
-  calendar: <CalendarScreen />,
-  passport: <PassportScreen />,
-  identity: <IdentityScreen />,
-  profile:  <ProfileScreen />,
-};
-
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<Screen>("runComplete");
+  const nav = (s: Screen) => setScreen(s);
+  const hideNav = HIDE_NAV.includes(screen);
+
+  function renderScreen(): JSX.Element {
+    switch (screen) {
+      // ── Post-run flow ──────────────────────────────────────────────────────
+      case "runComplete":    return <RunCompleteScreen   onContinue={() => nav("newMail")} />;
+      case "newMail":        return <NewMailScreen        onOpen={() => nav("openEnvelope")} />;
+      case "openEnvelope":   return <OpenEnvelopeScreen   onContinue={() => nav("cardReveal")} />;
+      case "cardReveal":     return <CardRevealScreen     onCollect={() => nav("home")} />;
+      // ── P1 review screens ─────────────────────────────────────────────────
+      case "monthlyReview":  return <MonthlyReviewScreen  onBack={() => nav("home")} />;
+      case "annualPassport": return <AnnualPassportScreen  onBack={() => nav("profile")} />;
+      // ── Core screens ──────────────────────────────────────────────────────
+      case "rundetail":      return <RunDetailScreen />;
+      case "home":           return <HomeScreen />;
+      case "run":            return <RunScreen />;
+      case "calendar":       return <CalendarScreen />;
+      case "passport":       return <PassportScreen />;
+      case "identity":       return <IdentityScreen />;
+      case "profile":        return <ProfileScreen onMonthlyReview={() => nav("monthlyReview")} onAnnualPassport={() => nav("annualPassport")} />;
+    }
+  }
 
   return (
     <div style={{
       minHeight: "100dvh",
       background: "#060B18",
       display: "flex",
-      justifyContent: "center",
+      alignItems: "stretch",
       fontFamily: "var(--font-sans)",
     }}>
+      {/* ── Brand Direction v2 — far left, standalone reference panel ── */}
+      <BrandDirectionPanel />
+
+      {/* ── App canvas — existing phone frame, centered in remaining space ── */}
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
       <div style={{
         width: "100%",
         maxWidth: 390,
@@ -144,18 +178,26 @@ export default function App() {
           <AnimatePresence mode="wait">
             <motion.div
               key={screen}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: hideNav ? 0 : 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+              exit={{ opacity: 0, y: hideNav ? 0 : -8 }}
+              transition={{ duration: hideNav ? 0.3 : 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {SCREENS[screen]}
+              {renderScreen()}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Bottom navigation */}
-        <div style={{
+        {/* Bottom navigation — hidden during immersive flows */}
+        <AnimatePresence>
+        {!hideNav && (
+        <motion.div
+          key="bottomnav"
+          initial={{ y: 80 }}
+          animate={{ y: 0 }}
+          exit={{ y: 80 }}
+          transition={{ type: "spring", stiffness: 340, damping: 32 }}
+          style={{
           position: "fixed",
           bottom: 0,
           left: "50%",
@@ -220,7 +262,10 @@ export default function App() {
               </button>
             );
           })}
-        </div>
+        </motion.div>
+        )}
+        </AnimatePresence>
+      </div>
       </div>
     </div>
   );

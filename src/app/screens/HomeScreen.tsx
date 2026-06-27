@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { CARDS, IDENTITIES, rarityConfig } from "../data";
 import { CollectibleCard } from "../components/CollectibleCard";
+import { PicoMessage } from "../components/Pico";
 
 const mainIdentity = IDENTITIES.find((i) => i.isMain)!;
 const unlockedCards = CARDS.filter((c) => c.unlocked).slice(-4).reverse();
@@ -27,30 +28,23 @@ export function HomeScreen() {
             <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#F0F2F8", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
               Good morning,<br />Alex 👋
             </h1>
+            <p style={{ margin: "6px 0 0", fontSize: 12, color: "rgba(240,242,248,0.28)", letterSpacing: "0.01em" }}>
+              Running since March 2021 · 94 journeys
+            </p>
           </div>
-          {/* Avatar + Level */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-            <div style={{
-              width: 52,
-              height: 52,
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #D4A63D 0%, #F0C850 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 26,
-              boxShadow: "0 0 0 2px rgba(212,166,61,0.3), 0 0 0 5px rgba(212,166,61,0.08)",
-            }}>
-              🏃
-            </div>
-            <div style={{
-              background: "rgba(212,166,61,0.12)",
-              border: "1px solid rgba(212,166,61,0.3)",
-              borderRadius: 12,
-              padding: "2px 8px",
-            }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#D4A63D", letterSpacing: "0.06em" }}>LVL 24</span>
-            </div>
+          {/* Avatar */}
+          <div style={{
+            width: 52,
+            height: 52,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #D4A63D 0%, #F0C850 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 26,
+            boxShadow: "0 0 0 2px rgba(212,166,61,0.3), 0 0 0 5px rgba(212,166,61,0.08)",
+          }}>
+            🏃
           </div>
         </div>
 
@@ -58,7 +52,7 @@ export function HomeScreen() {
         <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
           {[
             { label: "Total Distance", value: "2,847", unit: "km" },
-            { label: "Total Runs", value: "94", unit: "runs" },
+            { label: "Journeys", value: "94", unit: "" },
             { label: "Cards", value: "8 / 12", unit: "" },
           ].map((s) => (
             <div key={s.label} style={{
@@ -79,6 +73,13 @@ export function HomeScreen() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* ── PICO ── */}
+      <div style={{ padding: "0 22px 22px" }}>
+        <PicoMessage>
+          Your passport has grown since we last opened it.
+        </PicoMessage>
       </div>
 
       {/* ── MAIN IDENTITY CARD ── */}
