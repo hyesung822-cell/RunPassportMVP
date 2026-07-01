@@ -1,1 +1,21 @@
-import {View,Text} from 'react-native'; export default ()=> <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'#F7F3EA'}}><Text style={{fontSize:28}}>📬 Something Arrived</Text></View>;    
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function MailScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>📬 Something Arrived</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F7F3EA',
+  },
+  title: {
+    fontSize: 28,
+  },
+});
