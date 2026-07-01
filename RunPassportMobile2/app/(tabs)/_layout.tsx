@@ -1,35 +1,19 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+    <Tabs screenOptions={{
+      headerShown:false,
+      tabBarActiveTintColor:'#8B6B4A',
+      tabBarInactiveTintColor:'#A79C8E',
+      tabBarStyle:{backgroundColor:'#FFFDF8',borderTopColor:'#E9E1D5'}
+    }}>
+      <Tabs.Screen name="index" options={{title:'Home', tabBarIcon:({color,size})=><Ionicons name="home" color={color} size={size}/>}} />
+      <Tabs.Screen name="run" options={{title:'Run', tabBarIcon:({color,size})=><Ionicons name="walk" color={color} size={size}/>}} />
+      <Tabs.Screen name="mail" options={{title:'Mail', tabBarIcon:({color,size})=><Ionicons name="mail" color={color} size={size}/>}} />
+      <Tabs.Screen name="passport" options={{title:'Passport', tabBarIcon:({color,size})=><Ionicons name="book" color={color} size={size}/>}} />
+      <Tabs.Screen name="profile" options={{title:'Profile', tabBarIcon:({color,size})=><Ionicons name="person" color={color} size={size}/>}} />
     </Tabs>
-  );
+  )
 }

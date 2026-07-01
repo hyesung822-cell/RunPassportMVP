@@ -1,0 +1,1 @@
+import {View,Text} from 'react-native'; export default ()=> <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'#F7F3EA'}}><Text style={{fontSize:28}}>📬 Something Arrived</Text></View>;    
